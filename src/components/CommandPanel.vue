@@ -16,6 +16,12 @@
       }
   }
 
+  function keydown(ev: KeyboardEvent) {
+    if (ev.key === "Enter" && ev.metaKey) {
+      formSubmit();
+    }
+  }
+
   function formSubmit() {
     isActive.value = false;
     messageStore.addMessage(inputMessage.value)
@@ -28,12 +34,13 @@
 </script>
 
 <template>
-  <form @submit.prevent="formSubmit()" class="w-full flex justify-between border border-gray-600 rounded-md">
+  <form @submit.prevent="formSubmit()" class="w-full flex justify-between border border-gray-600 rounded-md shadow-md shadow-black">
     <textarea v-model="inputMessage"
       rows="1"
       class="flex-1 ml-6 my-4 p-0 bg-transparent outline-none resize-none text-gray-300 max-h-[200px] h-auto scroll-m-0"
       placeholder="Send a message"
-      @input="resize($event)"></textarea>
+      @input="resize($event)"
+      @keydown="keydown($event)"></textarea>
     <button :disabled="!isActive" class="self-end h-14 w-12 text-gray-400">
       <span v-if="isActive">Go</span>
       <span v-else
