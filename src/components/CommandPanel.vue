@@ -2,6 +2,9 @@
 
   import { ref } from 'vue';
   import { useMessageStore } from '../stores/messages';
+  import api from "../api/api"
+  import { ApiError } from "../api/api"
+
 
   const isActive = ref(true);
   const inputMessage = ref<string>("")
@@ -22,20 +25,30 @@
     }
   }
 
-  function formSubmit() {
+  async function formSubmit(): Promise<void> {
     isActive.value = false;
     messageStore.addMessage(inputMessage.value)
-    setTimeout(() => isActive.value = true, 3000)
-    isActive.value = false;
-    inputMessage.value = ""
-    return;
+    const response = await api.sendMessage(inputMessage.value)
+
+    if (response instanceof ApiError) handleApiErrors(response)
+    else {
+      messageStore.addMessage(response, false)
+      setTimeout(() => isActive.value = true, 3000)
+      isActive.value = false;
+      inputMessage.value = ""
+    }
   }
 
+  function handleApiErrors(error: ApiError): void {
+    if (error.code < 0) alert(error.message)
+      else console.log(error.message)
+  }
 </script>
 
 <template>
   <form @submit.prevent="formSubmit()" class="w-full flex justify-between border border-gray-600 rounded-md shadow-md shadow-black">
     <textarea v-model="inputMessage"
+      autofocus
       rows="1"
       class="flex-1 ml-6 my-4 p-0 bg-transparent outline-none resize-none text-gray-300 max-h-[200px] h-auto scroll-m-0"
       placeholder="Send a message"

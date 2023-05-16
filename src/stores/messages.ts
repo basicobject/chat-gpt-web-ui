@@ -25,11 +25,11 @@ export const useMessageStore = defineStore("messageStore", {
     return emptyStore;
   },
   actions: {
-    addMessage(message: string) {
+    addMessage(message: string, user: boolean = true) {
       this.messages.push({
         id: Date.now().toString(),
         text: message,
-        user: true,
+        user,
       });
     },
   },
