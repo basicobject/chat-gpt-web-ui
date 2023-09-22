@@ -7,12 +7,14 @@
 </script>
 
 <template>
-  <ul class="p-0 m-0 text-white">
-    <li v-for="message in messages" :key="message.id"
-      class="p-0 px-2 py-4 m-0 mb-2 rounded last:mb-0"
-      :class='{ "bg-gray-800" : message.user }'
-    > {{ message.text }} </li>
-  </ul>
+  <div class="p-1 border border-gray-600 rounded-md">
+    <ul class="p-0 m-0 text-white">
+      <li v-for="message in messages" :key="message.id"
+        class="p-0 px-2 py-4 m-0 mb-2 rounded last:mb-0"
+        :class='{ "bg-gray-800" : message.user }'
+      > {{ message.text }} </li>
+    </ul>
+  </div>
 </template>
 
 <style scoped>
